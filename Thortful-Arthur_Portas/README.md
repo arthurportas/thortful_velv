@@ -1,26 +1,26 @@
 # Thortful/Velv exercise
 
-This project exposes a single endpoint that fetches today trending movies from **[TMDB](https://developer.themoviedb.org/reference/trending-movies)** public api.
+This project exposes a single endpoint that fetches today trending movies from **[TMDB](https://developer.themoviedb.org/reference/trending-movies)** public API.
 A single property from a movie is exposed which is the **origin title**
-The value of this exercise lies in the consumption of a public api and have a REST api upfront.
+The value of this exercise lies in the consumption of a public API and have a REST API upfront.
 
 # Layout
 
-Project develop usingZZZZ a hexagonal architecture.
+Project developed using a hexagonal architecture.
 
 ## Tech key notes
 
  - Spring Boot 2.6
  - Java 11 (chosen due to compatibility with Lombok/Jackson tooling)
  - There is no persistence layer
- - It uses my own TMDB personal api access token (ouch!)
+ - It uses my own TMDB personal API access token (ouch!)
 
 ## How to run it
 
  - Having it locally project can be compiled and using Gradle clean compile app:bootRun
- - the docker way to do it is described inside file **docker/thortful/docker-setup.README**
+ - The docker way to do it is described inside file **docker/thortful/docker-setup.README**
 
-## Sample api calls
+## Sample API calls
 Requires *curl* and *jq* command line tools installed.
 Modify page number to use pagination (page=<NUMBER>)
 
@@ -28,7 +28,7 @@ Modify page number to use pagination (page=<NUMBER>)
 
     curl -v -XGET -H "Content-type: application/json" 'http://localhost:8089/api/trending/movies?page=1' | jq .
 
-### Same call of trending movies api in TMDB
+### Same call of trending movies API in TMDB
 
     curl --request GET \                                                                              
      --url 'https://api.themoviedb.org/3/trending/movie/day?language=en-US&page=1' \
