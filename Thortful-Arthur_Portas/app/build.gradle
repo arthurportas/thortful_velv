@@ -1,0 +1,82 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'com.palantir.docker' version '0.25.0'
+    id "com.gorylenko.gradle-git-properties" version "2.2.4"
+}
+
+archivesBaseName = 'thortful'
+
+bootJar {
+    mainClassName = 'com.thortful.app.Application'
+    manifest {
+        attributes 'Implementation-Title': 'Thortful API consumer'
+        attributes 'Implementation-Version': project.version
+    }
+    archiveFileName = "${archiveBaseName.get()}-${rootProject.version}.${archiveExtension.get()}"
+}
+
+docker {
+
+    name "thortful"
+
+    tag 'local', "${name}:local"
+
+    dockerfile file('../docker/thortful/')
+    copySpec.from("build/libs").into("app")
+
+    noCache true
+}
+
+dependencies {
+
+    // Internal dependencies
+    implementation project(':commons')
+    implementation project(':commons:rest-commons')
+
+    //ports
+    implementation project(':mdw:domain')
+    implementation project(':mdw:domain-api')
+    implementation project(':mdw:ports:http-out-api')
+
+    //adapters
+    implementation project(':adapters:rest-spring')
+
+    implementation project(':adapters:external-http-services')
+
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: jaxbApiVersion
+
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: okhttp3Version
+
+    implementation group: 'io.lettuce', name: 'lettuce-core', version: lettuceVersion
+
+    implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: retrofit2Version
+
+    implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: retrofit2Version
+
+
+    // Spring Boot
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion
+
+    compileOnly group: 'org.springframework.boot', name: 'spring-boot-devtools', version: springBootVersion
+
+    annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springBootVersion
+
+    // SpringDoc
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: springDocVersion
+
+    //Test
+    testImplementation project(path: ':mdw:domain-catalog', configuration: 'testArtifacts')
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+}
+
+configurations {
+    [apiElements, runtimeElements].each {
+        it.outgoing.artifacts.removeIf {
+            it.buildDependencies.getDependencies(null).contains(jar)
+        }
+        it.outgoing.artifact(bootJar)
+    }
+}

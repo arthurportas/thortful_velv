@@ -1,0 +1,10 @@
+#Run bellow commands from project root folder
+
+#bootjar
+./gradlew -b "build.gradle" clean compileTestJava bootJar -x test -Pversion=local
+
+#create 'thortful' docker image
+./gradlew -b "app/build.gradle" dockerClean dockerPrepare dockerTag -Pversion=local
+
+#run docker container
+docker-compose -f docker/thortful/docker-compose.yml up

@@ -1,0 +1,21 @@
+dependencies {
+
+    // Internal dependencies
+    implementation project(':mdw:domain-catalog')
+    implementation project(':commons')
+    implementation project(':mdw:ports:http-out-api')
+
+    implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: retrofitVersion
+    implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: retrofitVersion
+
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: mapstructVersion
+
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonDatatypeJSR310
+
+    testImplementation project(path: ':mdw:domain-catalog', configuration: 'testArtifacts')
+    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.0.0'
+
+    testImplementation group: 'com.squareup.okhttp3', name: 'mockwebserver', version: okhttp3MockwebserverVersion
+    testImplementation group: 'com.github.javafaker', name: 'javafaker', version: javaFakerVersion
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+}

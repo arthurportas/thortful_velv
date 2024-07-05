@@ -1,0 +1,18 @@
+rootProject.name = 'thortful'
+
+include 'app'
+
+include ':commons'
+include ':commons:rest-commons'
+
+include ':adapters'
+include ':adapters:external-http-services'
+include ':adapters:rest-spring'
+
+include ':mdw'
+include ':mdw:domain'
+include ':mdw:domain-api'
+include ':mdw:domain-catalog'
+include ':mdw:ports'
+include ':mdw:ports:http-out-api'
+

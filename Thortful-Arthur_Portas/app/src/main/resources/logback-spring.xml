@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+    <property name="LOG_HOME" value="./logs"/>
+    <property name="OUT_PATTERN"
+              value="thortful-%X{system:-api}-%X{communicationType:-server} {{ env }} %X{network:-default} [%d{yyyy-MM-dd'T'HH:mm:ss,SSS'Z'}] %X{web-context-CF-RAY:--} %-5p [%t] [%c] %msg%n%throwable"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${OUT_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="LOGGING_CONTEXT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>logContext</key>
+            <defaultValue>default</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="log-${logContext}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${LOG_HOME}/thortful-${logContext}.log</file>
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                    <Pattern>${OUT_PATTERN}</Pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <FileNamePattern>${LOG_HOME}/archive/thortful-${logContext}-%d{yyyy-MM-dd}.gz</FileNamePattern>
+                    <maxHistory>30</maxHistory>
+                </rollingPolicy>
+            </appender>
+        </sift>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="LOGGING_CONTEXT"/>
+    </root>
+
+</configuration>

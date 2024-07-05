@@ -1,0 +1,92 @@
+plugins {
+    id 'java'
+    id "com.github.ben-manes.versions" version "0.21.0"
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+dependencyUpdates.resolutionStrategy {
+    componentSelection { rules ->
+        rules.all { ComponentSelection selection ->
+            boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'preview', 'b', 'ea'].any { qualifier ->
+                selection.candidate.version ==~ /(?i).*[.-]$qualifier[.\d-+]*/
+            }
+            if (rejected) {
+                selection.reject('Release candidate')
+            }
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+    apply plugin: 'jacoco'
+
+    group 'com.thortful'
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    ext {
+        springVersion = '5.3.14'
+        springBootVersion = '2.6.2'
+        lombokVersion = '1.18.22'
+        lombokMapstructBindingVersion = '0.2.0'
+        commonsLangVersion = '3.12.0'
+        commonsTextVersion = '1.8'
+        jaxbApiVersion = '2.4.0-b180830.0359'
+        jacksonVersion = '2.11.1'
+        jacksonDatatypeJSR310 = '2.11.1'
+        javaFakerVersion = '1.0.2'
+        assertJVersion = '3.21.0'
+        jUnit5Version = '5.7.1'
+        retrofitVersion = '2.7.1'
+        mapstructVersion = '1.4.1.Final'
+        springDocVersion = '1.4.5'
+        lettuceVersion = '5.0.5.RELEASE'
+        okhttp3Version = '4.9.2'
+        okhttp3LoggingInterceptorVersion = '4.9.0'
+        okhttp3MockwebserverVersion = '4.4.0'
+        retrofit2Version = '2.9.0'
+        mockitoJunitJupiterVersion = '3.2.4'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+        annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: mapstructVersion
+        annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+        annotationProcessor group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: lombokMapstructBindingVersion
+
+
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+
+        testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+        testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+
+        testImplementation group: 'com.github.javafaker', name: 'javafaker', version: javaFakerVersion
+    }
+
+    compileJava {
+        options.compilerArgs += ["-Amapstruct.unmappedTargetPolicy=ERROR"]
+    }
+
+    test {
+        jvmArgs('--add-opens', 'java.base/java.lang.reflect=ALL-UNNAMED')
+
+        systemProperty 'spring.profiles.active', project.properties['SPRING_PROFILE'] ?: 'test'
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+            exceptionFormat = 'full'
+// Uncomment it to have logs when running tests, etc, ...
+//            showStandardStreams = true
+        }
+    }
+}

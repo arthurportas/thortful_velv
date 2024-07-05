@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+
+  thortful-api:
+    image: thortful:local
+    container_name: thortful-api-${ENVIRONMENT}
+    ports:
+      - ${THORTFUL_API_PORT:-8089}:8089
+      - ${THORTFUL_MANAGEMENT_PORT:-8082}:8082
+    restart: always

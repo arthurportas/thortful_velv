@@ -1,0 +1,9 @@
+dependencies {
+
+    implementation project(':commons')
+    implementation project(':mdw:domain-api')
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+}
