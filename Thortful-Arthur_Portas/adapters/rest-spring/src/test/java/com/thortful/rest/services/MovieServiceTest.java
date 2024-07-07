@@ -37,7 +37,7 @@ class MovieServiceTest {
     private PageRequestConverter pageRequestConverter;
 
     @Test
-    void getByBusinessClientSid_whenCityRequestFilterIsValid_thenReturnsCities() {
+    void getTrendingMovies_whenThereIsATrendingMoviesPage_thenReturnsTrendingMoviesResponse() {
 
         // Given
         final TrendingMoviesRequestFilter source = domainFaker.trendingMoviesRequestFilter().build();
