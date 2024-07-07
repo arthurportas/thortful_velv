@@ -20,7 +20,7 @@ class TrendingMoviesResponseConverterTest {
     private final TrendingMoviesResponseConverter converter = new TrendingMoviesResponseConverter();
 
     @Test
-    void convert_whenCityEntityReceived_returnsCity() {
+    void convert_whenTrendingMoviesPage_returnsTrendingMoviesResponse() {
 
         //Given
         final TrendingMoviesPage source = domainFaker.trendingMoviesPage().build();
